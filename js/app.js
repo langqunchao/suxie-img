@@ -43,6 +43,16 @@
     let apiAvailable = false;
     let currentQuery = 'portrait';
 
+    // ==================== 搜索缓存 ====================
+    let searchCache = {
+        query: '',
+        results: [],
+        usedIndices: [],
+        timestamp: 0,
+        page: 1,
+    };
+    const CACHE_TTL = 5 * 60 * 1000; // 5分钟
+
     // ==================== 备用图片池（60+张）====================
     const fallbackImages = [
         'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80',
@@ -108,7 +118,7 @@
     let shuffledIndices = [];
     let shufflePointer = 0;
     const recentHistory = [];
-    const HISTORY_SIZE = 10;
+    const HISTORY_SIZE = 30;
 
     function shuffleArray(array) {
         const arr = array.slice();
@@ -148,16 +158,53 @@
 
     // ==================== Unsplash 官方 API ====================
     async function fetchFromUnsplashApi() {
-        const url = 'https://api.unsplash.com/photos/random?query=' + encodeURIComponent(currentQuery) + '&orientation=portrait&client_id=' + UNSPLASH_ACCESS_KEY;
-        const response = await fetch(url, { method: 'GET', headers: { 'Accept-Version': 'v1' } });
-        if (!response.ok) throw new Error('API error: ' + response.status);
-        const data = await response.json();
-        const sep = data.urls.regular.includes('?') ? '&' : '?';
+        const now = Date.now();
+        const cacheExpired = now - searchCache.timestamp > CACHE_TTL;
+        const cacheEmpty = searchCache.results.length === 0;
+        const queryChanged = searchCache.query !== currentQuery;
+        const allUsed = searchCache.usedIndices.length >= searchCache.results.length;
+
+        if (cacheEmpty || cacheExpired || queryChanged || allUsed) {
+            const page = queryChanged ? 1 : (allUsed ? searchCache.page + 1 : 1);
+            const url = 'https://api.unsplash.com/search/photos?query=' + encodeURIComponent(currentQuery) + '&orientation=portrait&per_page=30&page=' + page + '&client_id=' + UNSPLASH_ACCESS_KEY;
+            const response = await fetch(url, { method: 'GET', headers: { 'Accept-Version': 'v1' } });
+            if (!response.ok) throw new Error('API error: ' + response.status);
+            const data = await response.json();
+
+            if (!data.results || data.results.length === 0) {
+                throw new Error('No results for query: ' + currentQuery);
+            }
+
+            searchCache = {
+                query: currentQuery,
+                results: data.results,
+                usedIndices: [],
+                timestamp: now,
+                page: page,
+            };
+        }
+
+        const availableIndices = [];
+        for (let i = 0; i < searchCache.results.length; i++) {
+            if (!searchCache.usedIndices.includes(i)) {
+                availableIndices.push(i);
+            }
+        }
+
+        if (availableIndices.length === 0) {
+            throw new Error('No available images in cache');
+        }
+
+        const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+        searchCache.usedIndices.push(randomIndex);
+
+        const photo = searchCache.results[randomIndex];
+        const sep = photo.urls.regular.includes('?') ? '&' : '?';
         return {
-            imageUrl: data.urls.regular + sep + 'w=800&q=80',
-            photoPage: data.links.html,
-            photographer: data.user.name,
-            photographerUrl: data.user.links.html,
+            imageUrl: photo.urls.regular + sep + 'w=800&q=80',
+            photoPage: photo.links.html,
+            photographer: photo.user.name,
+            photographerUrl: photo.user.links.html,
         };
     }
 
@@ -567,6 +614,8 @@
                 tags.forEach(function (t) { t.classList.remove('active'); });
                 tag.classList.add('active');
                 currentQuery = tag.dataset.query;
+                // 切换筛选时清空缓存，确保新主题立即生效
+                searchCache = { query: '', results: [], usedIndices: [], timestamp: 0, page: 1 };
                 loadNewImage();
             });
         });
