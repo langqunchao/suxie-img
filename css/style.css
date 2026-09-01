@@ -390,30 +390,33 @@ body {
 
 .timer-modes {
     display: flex;
-    gap: 6px;
+    align-items: center;
 }
 
-.timer-mode-btn {
-    padding: 6px 10px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    background-color: transparent;
+.timer-mode-select {
+    padding: 6px 28px 6px 10px;
+    font-size: 13px;
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: var(--transition);
-    white-space: nowrap;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b0b0b0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
 }
 
-.timer-mode-btn:hover {
-    color: var(--text-primary);
+.timer-mode-select:hover {
     border-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-.timer-mode-btn.active {
-    color: #fff;
-    background: linear-gradient(135deg, var(--accent), #357abd);
-    border-color: transparent;
+.timer-mode-select:focus {
+    outline: none;
+    border-color: var(--accent);
 }
 
 .timer-display {
@@ -730,9 +733,9 @@ body {
         gap: 8px;
     }
 
-    .timer-mode-btn {
-        padding: 4px 8px;
-        font-size: 11px;
+    .timer-mode-select {
+        padding: 4px 24px 4px 8px;
+        font-size: 12px;
     }
 
     .timer-display {
@@ -799,9 +802,9 @@ body {
         padding: 6px 10px;
     }
 
-    .timer-mode-btn {
-        padding: 3px 6px;
-        font-size: 10px;
+    .timer-mode-select {
+        padding: 3px 20px 3px 6px;
+        font-size: 11px;
     }
 
     .timer-display {
