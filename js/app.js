@@ -18,7 +18,6 @@
     const els = {
         image: document.getElementById('referenceImage'),
         loading: document.getElementById('loadingOverlay'),
-        creditText: document.getElementById('creditText'),
         switchBtn: document.getElementById('switchBtn'),
         heartBtn: document.getElementById('heartBtn'),
         btnFavorites: document.getElementById('btnFavorites'),
@@ -196,7 +195,6 @@
         els.image.classList.add('loaded');
         els.loading.classList.add('hidden');
         setLoading(false);
-        els.creditText.innerHTML = creditHtml;
         currentImageUrl = imageUrl;
         updateHeartState();
     }
@@ -204,7 +202,6 @@
     function showError() {
         els.loading.classList.add('hidden');
         setLoading(false);
-        els.creditText.textContent = '加载失败，请重试';
     }
 
     async function loadNewImage() {
