@@ -38,7 +38,6 @@
 
             <div class="control-body">
                 <div class="filter-bar" id="filterBar">
-                    <span class="filter-label">筛选：</span>
                     <button class="filter-tag active" data-query="portrait">全部</button>
                     <button class="filter-tag" data-query="asian portrait">亚洲人</button>
                     <button class="filter-tag" data-query="woman portrait">女性</button>
@@ -49,7 +48,7 @@
                 </div>
 
                 <p class="photo-credit" id="photoCredit">
-                    图片来源：<span id="creditText">Unsplash</span>
+                    <span id="creditText">Unsplash</span>
                 </p>
 
                 <div class="controls">
@@ -64,28 +63,27 @@
                     <p class="shortcut-hint">快捷键：按空格键快速切换</p>
                 </div>
 
-                <div class="timer-bar" id="timerBar">
-                    <div class="timer-modes">
-                        <button class="timer-mode-btn" data-min="10">10分钟</button>
-                        <button class="timer-mode-btn" data-min="20">20分钟</button>
-                        <button class="timer-mode-btn" data-min="30">30分钟</button>
-                        <button class="timer-mode-btn active" data-min="0">不限时</button>
-                    </div>
-                    <div class="timer-display" id="timerDisplay">--:--</div>
-                    <div class="timer-actions">
-                        <button class="timer-action-btn" id="timerToggle" title="开始/暂停">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                        </button>
-                        <button class="timer-action-btn" id="timerReset" title="重置">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-                        </button>
-                    </div>
-                </div>
             </div>
 
-            <footer class="site-footer">
-                <p>素材来源于 Unsplash，仅供个人绘画练习参考使用</p>
-            </footer>
+            <div class="timer-bar" id="timerBar">
+                <div class="timer-modes">
+                    <select class="timer-mode-select" id="timerModeSelect">
+                        <option value="10">10分钟</option>
+                        <option value="20">20分钟</option>
+                        <option value="30">30分钟</option>
+                        <option value="0" selected>不限时</option>
+                    </select>
+                </div>
+                <div class="timer-display" id="timerDisplay">--:--</div>
+                <div class="timer-actions">
+                    <button class="timer-action-btn" id="timerToggle" title="开始/暂停">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </button>
+                    <button class="timer-action-btn" id="timerReset" title="重置">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
