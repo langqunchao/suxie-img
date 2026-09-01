@@ -30,6 +30,7 @@
         timerDisplay: document.getElementById('timerDisplay'),
         timerToggle: document.getElementById('timerToggle'),
         timerReset: document.getElementById('timerReset'),
+        timerModeSelect: document.getElementById('timerModeSelect'),
     };
 
     // ==================== 状态 ====================
@@ -380,14 +381,9 @@
     };
 
     function initTimer() {
-        const modeBtns = document.querySelectorAll('.timer-mode-btn');
-        modeBtns.forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                modeBtns.forEach(function (b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                const min = parseInt(btn.dataset.min, 10);
-                Timer.start(min);
-            });
+        els.timerModeSelect.addEventListener('change', function () {
+            const min = parseInt(els.timerModeSelect.value, 10);
+            Timer.start(min);
         });
 
         els.timerToggle.addEventListener('click', function () {
