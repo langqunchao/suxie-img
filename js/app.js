@@ -153,8 +153,9 @@
         const response = await fetch(url, { method: 'GET', headers: { 'Accept-Version': 'v1' } });
         if (!response.ok) throw new Error('API error: ' + response.status);
         const data = await response.json();
+        const sep = data.urls.regular.includes('?') ? '&' : '?';
         return {
-            imageUrl: data.urls.regular + '&w=800&q=80',
+            imageUrl: data.urls.regular + sep + 'w=800&q=80',
             photoPage: data.links.html,
             photographer: data.user.name,
             photographerUrl: data.user.links.html,
@@ -173,6 +174,9 @@
     }
 
     function displayImage(imageUrl, creditHtml) {
+        els.image.onerror = function () {
+            showError();
+        };
         els.image.src = imageUrl;
         els.image.classList.add('loaded');
         els.loading.classList.add('hidden');
@@ -213,7 +217,7 @@
 
         const tempImg = new Image();
         tempImg.onload = function () {
-            displayImage(imageUrl, '<a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>');
+            displayImage(imageUrl, '');
         };
         tempImg.onerror = function () {
             showError();
@@ -522,6 +526,11 @@
                 '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
                 '</button>';
             els.masonryGrid.appendChild(div);
+
+            const img = div.querySelector('img');
+            img.addEventListener('click', function () {
+                window.open(item.imageUrl, '_blank');
+            });
         });
 
         els.masonryGrid.querySelectorAll('.heart-btn').forEach(function (btn) {
