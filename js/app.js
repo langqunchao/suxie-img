@@ -42,6 +42,7 @@
     const SWITCH_COOLDOWN = 800;
     let apiAvailable = false;
     let currentQuery = 'portrait';
+    let currentOrientation = 'portrait';
     const apiRecentUrls = [];
     const API_HISTORY_SIZE = 20;
 
@@ -167,7 +168,7 @@
 
     // ==================== Unsplash 官方 API ====================
     async function fetchFromUnsplashApi() {
-        const url = 'https://api.unsplash.com/photos/random?query=' + encodeURIComponent(currentQuery) + '&orientation=portrait&client_id=' + UNSPLASH_ACCESS_KEY;
+        const url = 'https://api.unsplash.com/photos/random?query=' + encodeURIComponent(currentQuery) + '&orientation=' + currentOrientation + '&order_by=latest&client_id=' + UNSPLASH_ACCESS_KEY;
         const response = await fetch(url, { method: 'GET', headers: { 'Accept-Version': 'v1' } });
         if (!response.ok) throw new Error('API error: ' + response.status);
         const data = await response.json();
@@ -591,6 +592,24 @@
         });
     }
 
+    // ==================== 构图筛选 ====================
+    function initOrientationTags() {
+        const tags = document.querySelectorAll('.orientation-tag');
+        tags.forEach(function (tag) {
+            tag.addEventListener('click', function () {
+                if (!UNSPLASH_ACCESS_KEY) {
+                    alert('筛选功能需要配置 Unsplash API Key，请在 js/app.js 中填入 Access Key');
+                    return;
+                }
+                if (isLoading) return;
+                tags.forEach(function (t) { t.classList.remove('active'); });
+                tag.classList.add('active');
+                currentOrientation = tag.dataset.orientation;
+                loadNewImage();
+            });
+        });
+    }
+
     // ==================== 事件处理 ====================
     function handleSwitch() {
         const now = Date.now();
@@ -622,6 +641,7 @@
         els.btnFavorites.addEventListener('click', openFavorites);
         els.btnBack.addEventListener('click', closeFavorites);
         initFilterTags();
+        initOrientationTags();
         initTimer();
         loadNewImage();
     }
