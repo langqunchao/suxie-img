@@ -43,25 +43,6 @@
     let apiAvailable = false;
     let currentQuery = 'portrait';
     let currentOrientation = 'portrait';
-    const apiRecentUrls = [];
-    const API_HISTORY_SIZE = 20;
-
-    function extractPhotoId(imageUrl) {
-        const match = imageUrl.match(/photo-[a-zA-Z0-9_-]+/);
-        return match ? match[0] : imageUrl;
-    }
-
-    function isInApiHistory(imageUrl) {
-        const id = extractPhotoId(imageUrl);
-        return apiRecentUrls.some(function (url) { return extractPhotoId(url) === id; });
-    }
-
-    function addToApiHistory(imageUrl) {
-        apiRecentUrls.push(imageUrl);
-        if (apiRecentUrls.length > API_HISTORY_SIZE) {
-            apiRecentUrls.shift();
-        }
-    }
 
     // ==================== 备用图片池（60+张）====================
     const fallbackImages = [
@@ -211,21 +192,12 @@
 
         if (UNSPLASH_ACCESS_KEY) {
             try {
-                let data = null;
-                let attempts = 0;
-                const maxAttempts = 5;
-                do {
-                    data = await fetchFromUnsplashApi();
-                    attempts++;
-                } while (isInApiHistory(data.imageUrl) && attempts < maxAttempts);
-
+                const data = await fetchFromUnsplashApi();
                 apiAvailable = true;
                 currentPhotoPage = data.photoPage;
                 currentPhotographer = data.photographer;
                 currentPhotographerUrl = data.photographerUrl;
-                addToApiHistory(data.imageUrl);
-                const creditHtml = '摄影师：<a href="' + data.photographerUrl + '" target="_blank" rel="noopener">' + data.photographer + '</a> / <a href="' + data.photoPage + '" target="_blank" rel="noopener">Unsplash</a>';
-                displayImage(data.imageUrl, creditHtml);
+                displayImage(data.imageUrl, '');
                 return;
             } catch (err) {
                 console.warn('Unsplash API 调用失败，降级到备用池：', err.message);
