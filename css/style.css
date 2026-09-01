@@ -227,42 +227,6 @@ body {
     cursor: not-allowed;
 }
 
-/* 构图筛选 */
-.orientation-bar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-}
-
-.orientation-tag {
-    padding: 6px 16px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    background-color: var(--bg-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: var(--transition);
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.orientation-tag:hover {
-    color: var(--text-primary);
-    border-color: rgba(255, 255, 255, 0.2);
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.orientation-tag.active {
-    color: #fff;
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
-    border-color: transparent;
-    box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
-}
-
 /* 图片署名 */
 .photo-credit {
     font-size: 12px;
@@ -735,26 +699,6 @@ body {
     }
 
     .filter-tag {
-        padding: 4px 10px;
-        font-size: 12px;
-        flex-shrink: 0;
-    }
-
-    .orientation-bar {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 6px;
-        padding-bottom: 2px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        justify-content: center;
-    }
-
-    .orientation-bar::-webkit-scrollbar {
-        display: none;
-    }
-
-    .orientation-tag {
         padding: 4px 10px;
         font-size: 12px;
         flex-shrink: 0;
